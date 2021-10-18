@@ -1,67 +1,31 @@
 package com.example.work.rest_work.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.example.work.rest_work.model.Role;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import javax.persistence.*;
+
+@Getter
+@Setter
 @Entity
+@Table(name = "user")
+@NoArgsConstructor
 public class User {
+
     @Id
-        private String name;
-        private String login;
-        private String password;
-        private String role;
+    private String login;
 
-        public User(){ }
+    private String name;
 
-        public User(String name, String login, String password, String role){
-            this.name=name;
-            this.login=login;
-            this.password=password;
-            this.role=role;
-        }
+    private String password;
 
-        public String getName(){
-            return name;
-        }
+    private String role;
 
-        public void setName(String name){
-            this.name = name;
-        }
-
-        public String getLogin(){
-            return login;
-        }
-
-        public void setLogin(String login){
-            this.login = login;
-        }
-
-        public String getPassword(){
-            return password;
-        }
-
-        public void setPassword(String password){
-            this.password = password;
-        }
-
-        public String getRole(){
-            return role;
-        }
-
-        public void setRole(String role){
-            this.role = role;
-        }
-
-        @Override
-    public String toString() {
-            return "User{" +
-                    "name=" + name +
-                    ", login='" + login + '\'' +
-                    ", password='" + password + '\'' +
-                    ", role=" + role + '\'' +
-                    '}';
-        }
+    @ManyToOne
+    @JoinColumn(name = "name")
+    @JsonManagedReference
+    private Role role_name;
 }
-

@@ -1,51 +1,30 @@
 package com.example.work.rest_work.service;
 
-import com.example.work.rest_work.model.User;
+import com.example.work.rest_work.model.Role;
+import com.example.work.rest_work.repository.RoleRepository;
+import com.example.work.rest_work.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
+import javax.persistence.EntityNotFoundException;
+import java.util.*;
 
 @Service
-public class UserServiceImpl implements UserService{
+@RequiredArgsConstructor
+public class UserServiceImpl{
 
-    // Хранилище user
-    private static final Map<String, User> CLIENT_REPOSITORY_MAP = new HashMap<>();
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
-    // Переменная для генерации ID клиента
-    private static final AtomicInteger CLIENT_ID_HOLDER = new AtomicInteger();
-
-    @Override
-    public void create(User user, String login) {
-        user.setLogin(login);
-        CLIENT_REPOSITORY_MAP.put(login, user);
-    }
-
-    @Override
-    public List<User> readAll() {
-        return new ArrayList<>(CLIENT_REPOSITORY_MAP.values());
-    }
-
-    @Override
-    public User read(String login) {
-        return CLIENT_REPOSITORY_MAP.get(login);
-    }
-
-    @Override
-    public boolean update(User user, String login) {
-        if (CLIENT_REPOSITORY_MAP.containsKey(login)) {
-            user.setLogin(login);
-            CLIENT_REPOSITORY_MAP.put(login, user);
-            return true;
+    public Role readRole(Long id){
+        Optional<RoleRepository> role = roleRepository.findById(id);
+        if(role.isPresent()){
+            return (Role) role.get();
         }
-        return false;
+        throw new EntityNotFoundException("Не найдена такая роль");
     }
 
-    @Override
-    public boolean delete(String login) {
-        return CLIENT_REPOSITORY_MAP.remove(login) != null;
+    public List<RoleRepository> readRole(){
+        return roleRepository.findAll();
     }
 }
